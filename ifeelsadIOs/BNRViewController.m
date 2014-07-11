@@ -18,7 +18,6 @@
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-	// Do any additional setup after loading the view, typically from a nib.
 }
 
 - (void)didReceiveMemoryWarning
@@ -27,17 +26,26 @@
     // Dispose of any resources that can be recreated.
 }
 - (IBAction)sendFeeling:(id)sender {
-    NSLog(@"POST Feeling");
-    
+    self.notificationLabel.text = @"loading..";
     AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
-    NSDictionary *parameters = @{@"foo": @"bar"};
-    NSDictionary *data = @{@"feeling": @{@"sad":@"sad", @"ip":@"157.253.23.123", @"country_name":@"Colombia", @"country_code":@"CO" }};
+    NSDictionary *data = @{@"feeling": @{@"sad":          @"sad",
+                                         @"message":      self.messageTextField.text,
+                                         @"ip":           @"157.253.23.123",
+                                         @"country_name": @"Colombia",
+                                         @"country_code": @"CO" }};
 
-    
     [manager POST:@"http://ifeelsad.herokuapp.com/feelings.json"
        parameters:data
-          success:^(AFHTTPRequestOperation *operation, id responseObject) { NSLog(@"POST Success: %@", responseObject); }
-          failure:^(AFHTTPRequestOperation *operation, NSError *error) { NSLog(@"POST Error: %@", error); }];
+          success:^(AFHTTPRequestOperation *operation, id responseObject) {
+              self.notificationLabel.text = @"";
+              NSLog(@"%@", responseObject);
+              self.sadCountLabel.text     = responseObject[@"country_code"];
+          }
+          failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+              self.notificationLabel.text = @"Error posting";
+          }];
+    
+    self.messageTextField.text = @"";
 }
 - (IBAction)getFeelings:(id)sender {
     NSLog(@"GET Feelings");
@@ -48,7 +56,4 @@
          failure:^(AFHTTPRequestOperation *operation, NSError *error) { NSLog(@"GET Error: %@", error); }];
 
 }
-
-
-
 @end

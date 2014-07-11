@@ -9,5 +9,8 @@
 #import <UIKit/UIKit.h>
 
 @interface BNRViewController : UIViewController
-
+@property (nonatomic, weak) IBOutlet UILabel *notificationLabel;
+@property (nonatomic, weak) IBOutlet UILabel *sadCountLabel;
+@property (nonatomic, weak) IBOutlet UITextField *messageTextField;
+@property (nonatomic, weak) IBOutlet UIActivityIndicatorView *loading;
 @end
