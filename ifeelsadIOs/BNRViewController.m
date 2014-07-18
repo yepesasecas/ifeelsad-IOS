@@ -38,8 +38,7 @@
        parameters:data
           success:^(AFHTTPRequestOperation *operation, id responseObject) {
               self.notificationLabel.text = @"";
-              NSLog(@"%@", responseObject);
-              self.sadCountLabel.text     = responseObject[@"country_code"];
+              [self getFeelings];
           }
           failure:^(AFHTTPRequestOperation *operation, NSError *error) {
               self.notificationLabel.text = @"Error posting";
@@ -54,6 +53,20 @@
       parameters:nil
          success:^(AFHTTPRequestOperation *operation, id responseObject) { NSLog(@"GET Success: %@", responseObject); }
          failure:^(AFHTTPRequestOperation *operation, NSError *error) { NSLog(@"GET Error: %@", error); }];
+
+}
+
+- (void) getFeelings{
+    AFHTTPRequestOperationManager *manager = [AFHTTPRequestOperationManager manager];
+    [manager GET:@"http://ifeelsad.herokuapp.com/feelings"
+      parameters:nil
+         success:^(AFHTTPRequestOperation *operation, id responseObject) {
+             NSLog(@"%@", responseObject);
+             self.sadCountLabel.text = [responseObject valueForKey:@"count"];
+         }
+         failure:^(AFHTTPRequestOperation *operation, NSError *error) {
+             NSLog(@"GET Error: %@", error);
+         }];
 
 }
 @end
